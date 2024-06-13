@@ -12,7 +12,7 @@
 
 
 You can follow along by accessing the module at the following
-[publically available GitHub repository.](https://github.com/recursion-ninja/Presentation-Well-Typed)
+[publicly available GitHub repository.](https://github.com/recursion-ninja/Presentation-Well-Typed)
 
 __Ask questions any time!__
 
@@ -79,7 +79,7 @@ Needleman–Wunsch( σ, GATTACA, ATTAGAGACA )
 @
 
 
-The alogrithm aligns the strings by constructing an (𝙢 + 1) × (𝙣 + 1) matrix 𝙈.
+The algorithm aligns the strings by constructing an (𝙢 + 1) × (𝙣 + 1) matrix 𝙈.
 Each both 𝙨₁ and 𝙨₂ have a ― symbol prepended to them.
 The smaller string 𝙨₁ is placed before the rows of 𝙈
 The longer string 𝙨₂ is placed above the columns of 𝙈
@@ -149,7 +149,7 @@ measured by σ in the "alignment space."
 Each cell in 𝙈, except for cell 𝙈₀₀, depends on the value of the cell direct above it,
 directly to it's left, as well as the cell diagonally above and to it's left.
 However, cells in the first row should not consider the cells above them.
-Similarly, cells in the the first column should not consider the cells to thier left.
+Similarly, cells in the the first column should not consider the cells to their left.
 
 /Note:/
 The function @memo@ takes possibly negative integer indices.
@@ -224,7 +224,7 @@ As the algorithm proceeds row-by-row, the entirety of the matrix is created:
 
 If one were to calculate more than just the alignment distance,
 and also compute the /actual/ alignment of 𝙨₁ and 𝙨₂,
-this can be acheived by "tracing backwards" from the final cell 𝙈ₘₙ
+this can be achieved by "tracing backwards" from the final cell 𝙈ₘₙ
 to the first cell 𝙈₀₀.
 
 Beginning at 𝙈ₘₙ choose to move in one of three directions, either ←, ↖, or ↑;
@@ -356,7 +356,7 @@ needlemanWunschDefinition σ in1 in2 =
 
         {- |
         Compute the value of the desired cell in the matrix 𝙈 using the distance measure σ.
-        The resulting value of the desired cell is the minimum paritial distance from 𝙈ᵢⱼ to 𝙈₀₀.
+        The resulting value of the desired cell is the minimum partial distance from 𝙈ᵢⱼ to 𝙈₀₀.
         This is calculated from the following memoized values:
 
             * The distance measure σ
@@ -365,14 +365,14 @@ needlemanWunschDefinition σ in1 in2 =
             * The symbol from 𝙨₂ above of the desired column
         -}
         minimizeCellDistance :: Char -> Distance -> (Distance, Distance, Char) -> Distance
-        minimizeCellDistance charL cellL (cellD, cellA, charA) = minimum
-            [ cellL + σ  '-'  charA  
+        minimizeCellDistance charL cell (cellD, cellA, charA) = minimum
+            [ cell + σ  '-'  charA  
             , cellD + σ charL charA 
             , cellA + σ charL  '-'  
             ]
 
         {- |
-        Generate the first row, which will be used as the accumulater seed for the subsequent rows.
+        Generate the first row, which will be used as the accumulator seed for the subsequent rows.
 
         The first cell of the first row is set to 0.
         Any cell after the first is computed by using the value of the cell on it's left.
@@ -427,7 +427,7 @@ instance Enum Distance where
 instance Num Distance where
     (+)
       | otherwise =
-        let threshhold =
+        let threshold =
                 let limit = maxBound
                     width = finiteBitSize limit
                     space = 1 `shiftL` (width - 1)
@@ -437,7 +437,7 @@ instance Num Distance where
                 D x → \case
                     rhs@(D y) | y == maxBound → rhs
                     D y
-                        | x >= threshhold && y >= threshhold →
+                        | x >= threshold && y >= threshold →
                             let x' = fromIntegral x ∷ Word32
                                 y' = fromIntegral x ∷ Word32
                             in  D . fromIntegral $ x' + y' `mod` 0xFFFF
@@ -449,7 +449,7 @@ instance Num Distance where
 
 
     (*) =
-        let threshhold =
+        let threshold =
                 let limit = maxBound
                     width = finiteBitSize limit
                     extra = width `div` 2
@@ -459,7 +459,7 @@ instance Num Distance where
                 D x → \case
                     rhs@(D y) | y == maxBound → rhs
                     D y
-                        | x >= threshhold && y >= threshhold →
+                        | x >= threshold && y >= threshold →
                             let x' = fromIntegral x ∷ Word32
                                 y' = fromIntegral x ∷ Word32
                             in  D . fromIntegral $ x' * y' `mod` 0xFFFF
