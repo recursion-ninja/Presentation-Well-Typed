@@ -1,0 +1,34 @@
+cabal-version:      3.4
+name:               Presentation-Well-Typed
+version:            1.0.0
+synopsis:           Presentation of sting alignment code for Well-Typed
+homepage:           github.com/recursion-ninja/Presentation-Well-Typed
+license:            CC-BY-SA-4.0
+license-file:       LICENSE
+author:             Alex Washburn
+maintainer:         github@recursion.ninja
+copyright:          Alex Washburn, 2024
+category:           Text
+build-type:         Simple
+
+library
+
+    exposed-modules:
+        StringAlignment
+
+    default-extensions:
+        DerivingStrategies
+        LambdaCase
+        UnicodeSyntax
+
+    build-depends:
+        base ^>=4.20.0.0,
+
+    hs-source-dirs:
+        src
+
+    default-language:
+        GHC2021
+
+    ghc-options:
+        -Wall
