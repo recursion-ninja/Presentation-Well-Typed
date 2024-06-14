@@ -11,24 +11,107 @@ copyright:          Alex Washburn, 2024
 category:           Text
 build-type:         Simple
 
-library
 
-    exposed-modules:
-        StringAlignment
+flag Enforce-Sanity
+   description: Ensure that all warnings are handled
+   default:     False
+   manual:      True
+
+flag Forego-Sanity
+   description: Disable extensive and helpful compiler warnings
+   default:     False
+   manual:      True
+
+flag Super-Optimization
+   description: Apply extremely agressive and extremely time consuming optimization passes
+   default:     False
+   manual:      True
+
+
+-- Global build directives
+common build-defaults
 
     default-extensions:
         DerivingStrategies
         LambdaCase
         UnicodeSyntax
 
+    default-language:
+        GHC2021
+
+    if !flag(Forego-Sanity)
+      ghc-options:
+        -- Sanity check warnings
+        --   1. Include all warnings by default
+        -Weverything
+        --   2. Exclude the undesirable warnings
+        -Wno-all-missed-specialisations
+        -Wno-implicit-prelude
+        -Wno-missing-import-lists
+        -Wno-missing-kind-signatures
+        -Wno-missing-safe-haskell-mode
+        -Wno-monomorphism-restriction
+        -Wno-redundant-bang-patterns
+        -Wno-type-defaults
+        -Wno-unsafe
+
+    if flag(Enforce-Sanity)
+      ghc-options:
+        -Werror
+
+
+executable align-cli
+
+    import:
+        build-defaults,
+
+    main-is:
+        align-cli.hs
+
+    build-depends:
+        base ^>=4.20.0.0,
+        Presentation-Well-Typed,
+
+    -- If need for a high performance executable was specified,
+    -- then at compile-time GHC will allocate additional time and memory
+    -- to explore and apply the most agrressive optimization possible.
+    if flag(Super-Optimization)
+        ghc-options:
+            -O2
+            -fexcess-precision
+            -fexpose-all-unfoldings
+            -flate-specialise
+            -fmax-simplifier-iterations=16
+            -foptimal-applicative-do
+            -fspec-constr-count=8
+            -fspec-constr-keen
+            -fspecialize-aggressively
+            -fstatic-argument-transformation
+            -fstg-cse
+            -fstrictness-before=1
+            -fstrictness-before=2
+            -fstrictness-before=3
+            -fstrictness-before=4
+            -funbox-small-strict-fields
+            -funbox-strict-fields
+    else:
+        ghc-options:
+            -O0    
+
+    hs-source-dirs:
+        app
+
+
+library
+
+    import:
+        build-defaults,
+
+    exposed-modules:
+        StringAlignment
+
     build-depends:
         base ^>=4.20.0.0,
 
     hs-source-dirs:
         src
-
-    default-language:
-        GHC2021
-
-    ghc-options:
-        -Wall

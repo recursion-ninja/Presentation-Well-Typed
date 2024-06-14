@@ -131,17 +131,16 @@ First, the algorithm initializes the cell 𝙈₀₀ with a distance of 0:
 
 Second, the algorithm applies a memoized lookup function to calculate the value of 𝙈[i,j]:
 
-@
-   memo: ℤ×ℤ ↦ ℕ ∪ { ∞ }
-   memo(i,j) = ∞ if i < 0
-   memo(i,j) = ∞ if j < 0
-   memo(i,j) = otherwise:
-        minimum
-            [ 𝙈[i  , j-1] + σ(  ―, 𝙨₂[j])
-            , 𝙈[i-1, j-1] + σ(𝙨₁[i], 𝙨₂[j])
-            , 𝙈[i-1, j  ] + σ(𝙨₁[i],   ―)
-            ]
-@
+> memo: ℤ×ℤ ↦ ℕ ∪ { ∞ }
+> memo(i,j) = ∞ if i < 0
+> memo(i,j) = ∞ if j < 0
+> memo(i,j) = otherwise:
+>      minimum
+>          [ 𝙈[i  , j-1] + σ(  ―, 𝙨₂[j])
+>          , 𝙈[i-1, j-1] + σ(𝙨₁[i], 𝙨₂[j])
+>          , 𝙈[i-1, j  ] + σ(𝙨₁[i],   ―)
+>          ]
+
 
 The final cell 𝙈ₘₙ of the matrix 𝙈 contains the distance between 𝙨₁ and 𝙨₂,
 measured by σ in the "alignment space."
@@ -181,13 +180,12 @@ Here is the result of generating the rest of the first row:
 
 Consider the cell 𝙈[1,1] in the second row:
 
-@
-    𝙈[0,1] = memo(1,1)
-           = minimum [ memo(1,0) + σ(―, @G@), memo(0,0) + σ(@G@, A), memo(0,1) + σ(A, ―) ]
-           = minimum [ 2 + 2, 0 + 1, 2 + 2 ]
-           = minimum [ 4, 1, 4 ]
-           = 1
-@
+>    𝙈[0,1] = memo(1,1)
+>           = minimum [ memo(1,0) + σ(―, G), memo(0,0) + σ(G, A), memo(0,1) + σ(A, ―) ]
+>           = minimum [ 2 + 2, 0 + 1, 2 + 2 ]
+>           = minimum [ 4, 1, 4 ]
+>           = 1
+>
 
 Here is the result of generating the entire second row:
 
@@ -258,10 +256,10 @@ One possible "traceback" path of the matrix 𝙈 is depicited below:
     +---+---+---+---+---+---+---+---+---+---+---+---+
 
 This "traceback" corresponds to the following string alignment:
-@
-  𝙨₁ = GATTACA----
-  𝙨₂ = -ATTAGAGACA
-@
+
+> 𝙨₁ = GATTACA----
+> 𝙨₂ = -ATTAGAGACA
+
 
 == Asymptotic Analysis
 
@@ -365,8 +363,8 @@ needlemanWunschDefinition σ in1 in2 =
             * The symbol from 𝙨₂ above of the desired column
         -}
         minimizeCellDistance :: Char -> Distance -> (Distance, Distance, Char) -> Distance
-        minimizeCellDistance charL cell (cellD, cellA, charA) = minimum
-            [ cell + σ  '-'  charA  
+        minimizeCellDistance charL cellL (cellD, cellA, charA) = minimum
+            [ cellL + σ  '-'  charA  
             , cellD + σ charL charA 
             , cellA + σ charL  '-'  
             ]
@@ -392,12 +390,10 @@ needlemanWunschDefinition σ in1 in2 =
         -- | Compute a row of the memoization matrix 𝙈
         computeRow
           :: NonEmpty Distance -- ^ The previous row in 𝙈
-          -> Char       -- ^ The symbol in 𝙨₁ which was placed in front of this row
+          -> Char              -- ^ The symbol in 𝙨₁ which was placed in front of this row
           -> NonEmpty Distance -- ^ The current row of 𝙈
         computeRow prevRow charL =
-            let {- |
-                
-                -}
+            let 
                 diagRow :: NonEmpty Distance
                 diagRow = infinity <| prevRow
 
