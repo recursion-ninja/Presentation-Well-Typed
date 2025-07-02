@@ -69,7 +69,7 @@ executable align-cli
         align-cli.hs
 
     build-depends:
-        base ^>=4.20.0.0,
+        base >=4.20.0.0,
         Presentation-Well-Typed,
 
     -- If need for a high performance executable was specified,
@@ -94,9 +94,6 @@ executable align-cli
             -fstrictness-before=4
             -funbox-small-strict-fields
             -funbox-strict-fields
-    else:
-        ghc-options:
-            -O0    
 
     hs-source-dirs:
         app
@@ -111,7 +108,7 @@ library
         StringAlignment
 
     build-depends:
-        base ^>=4.20.0.0,
+        base >=4.20.0.0,
 
     hs-source-dirs:
         src

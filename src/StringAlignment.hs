@@ -1,5 +1,34 @@
 {- |
 
+    ______                 __  _                   __
+   / ____/_  ______  _____/ /_(_)___  ____  ____ _/ /
+  / /_  / / / / __ \/ ___/ __/ / __ \/ __ \/ __ `/ /
+ / __/ / /_/ / / / / /__/ /_/ / /_/ / / / / /_/ / /
+/_/ ___\__,_/_/ /_/\___/\__/_/\____/_/ /_/\__,_/_/
+   / __ \___  ____ ______/ /  _
+  / /_/ / _ \/ __ `/ ___/ /  (_)
+ / ____/  __/ /_/ / /  / /  _
+/_/    \___/\__,_/_/  /_/  (_)
+
+
+      _     __ _       _     _   _                      __                         __
+     /_\   / _(_) __ _| |__ | |_(_)_ __   __ _    ___  / _|  ___  ___ __ _ _ __   / /
+    //_\\  \ \| |/ _` | '_ \| __| | '_ \ / _` |  / _ \| |_  / __|/ __/ _` | '_ \ / /
+   /  _  \ _\ \ | (_| | | | | |_| | | | | (_| | | (_) |  _| \__ \ (_| (_| | | | / /___
+   \_/ \_/ \__/_|\__, |_| |_|\__|_|_| |_|\__, |  \___/|_|   |___/\___\__,_|_| |_\____/
+                 |___/                   |___/
+               _         _   _            __    __ _ _     _
+              (_)_ __   | |_| |__   ___  / / /\ \ (_) | __| |
+              | | '_ \  | __| '_ \ / _ \ \ \/  \/ / | |/ _` |
+              | | | | | | |_| | | |  __/  \  /\  /| | | (_| |
+              |_|_| |_|  \__|_| |_|\___|   \/  \/ |_|_|\__,_|
+
+
+
+
+
+
+
 
 = Needleman–Wunsch String Alignment
 
@@ -17,8 +46,21 @@ You can follow along by accessing the module at the following
 __Ask questions any time!__
 
 
-== Algorithm Summary
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+== Algorithm Summary
 
 The module contains the code for the Needleman–Wunsch string alignment algorithm.
 This is a dynamic programming algorithm designed to find a global minimum distance.
@@ -26,7 +68,6 @@ This is a dynamic programming algorithm designed to find a global minimum distan
 The algorithm was originally published in the 1970 paper,
 /"A general method applicable to the search for similarities in the amino acid sequence of two proteins."/
 [The original paper is accessible here](https://doi.org/10.1016%2F0022-2836%2870%2990057-4)
-
 
 The Needleman–Wunsch algorithm operates on three input parameters:
 
@@ -36,15 +77,17 @@ The Needleman–Wunsch algorithm operates on three input parameters:
 
   * 𝙨₁, 𝙨₂: Two strings of symbols, such that, |𝙨₁| = 𝙢, |𝙨₂| = 𝙣, 𝙢 ≤ 𝙣, and 𝙨₁, 𝙨₂ ∈ Σ✲
 
-
 The /complete/ algorithm Needleman–Wunsch produces two outputs:
 
   * An alignment of strings 𝙨₁ and 𝙨₂ which maximizes similarity
 
   * The minimal distance between strings 𝙨₁ and 𝙨₂, as defined by σ
 
-
 However, /for brevity of the presentation,/ we will be exploring code which /only computes the alignment distance./
+
+
+
+
 
 
 == Algorithm Description
@@ -52,9 +95,7 @@ However, /for brevity of the presentation,/ we will be exploring code which /onl
 It is easiest to understand the algorithm by using a running example as the alogrithm's operation is described.
 Let us define the input parameters as the following:
 
-  * @
-    Σ = { -, A, C, G, T }
-    @
+  * @ Σ = { -, A, C, G, T } @
 
   * @
     σ(x,y) = 0 iff x = y
@@ -73,17 +114,16 @@ __Example Alignment__
 
 @
 Needleman–Wunsch( σ, GATTACA, ATTAGAGACA )
-
-𝙨₁ = GATT--A--CA
-𝙨₂ = -ATTAGAGACA
+  𝙨₁' = GATT--A--CA
+  𝙨₂' = -ATTAGAGACA
 @
+
 
 
 The algorithm aligns the strings by constructing an (𝙢 + 1) × (𝙣 + 1) matrix 𝙈.
 Each both 𝙨₁ and 𝙨₂ have a ― symbol prepended to them.
-The smaller string 𝙨₁ is placed before the rows of 𝙈
-The longer string 𝙨₂ is placed above the columns of 𝙈
-The initial configuration of 𝙈
+The smaller string 𝙨₁ is placed before the rows of 𝙈.
+The longer string 𝙨₂ is placed above the columns of 𝙈.
 
     +---+---+---+---+---+---+---+---+---+---+---+---+
     | × | - | A | T | T | A | G | A | G | A | C | A |
@@ -106,7 +146,14 @@ The initial configuration of 𝙈
     +---+---+---+---+---+---+---+---+---+---+---+---+
 
 
+
+
+
+
 First, the algorithm initializes the cell 𝙈₀₀ with a distance of 0:
+
+
+
 
     +---+---+---+---+---+---+---+---+---+---+---+---+
     | × | - | A | T | T | A | G | A | G | A | C | A |
@@ -129,6 +176,10 @@ First, the algorithm initializes the cell 𝙈₀₀ with a distance of 0:
     +---+---+---+---+---+---+---+---+---+---+---+---+
 
 
+
+
+
+
 Second, the algorithm applies a memoized lookup function to calculate the value of 𝙈[i,j]:
 
 > memo: ℤ×ℤ ↦ ℕ ∪ { ∞ }
@@ -140,6 +191,23 @@ Second, the algorithm applies a memoized lookup function to calculate the value 
 >          , 𝙈[i-1, j-1] + σ(𝙨₁[i], 𝙨₂[j])
 >          , 𝙈[i-1, j  ] + σ(𝙨₁[i],   ―)
 >          ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 The final cell 𝙈ₘₙ of the matrix 𝙈 contains the distance between 𝙨₁ and 𝙨₂,
@@ -157,6 +225,19 @@ since we no longer need to special case cells in the first row or column.
 
 Knowing that each cell in 𝙈 (except 𝙈₀₀) is defined by the row above it and
 the cell to it's left, the algorithm generates 𝙈 row-by-row, from top to bottom.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Consider the cell 𝙈[0,1] in the first row:
@@ -178,6 +259,17 @@ Here is the result of generating the rest of the first row:
     +---+---+---+---+---+---+---+---+---+---+---+---+
 
 
+
+
+
+
+
+
+
+
+
+
+
 Consider the cell 𝙈[1,1] in the second row:
 
 >    𝙈[0,1] = memo(1,1)
@@ -186,6 +278,7 @@ Consider the cell 𝙈[1,1] in the second row:
 >           = minimum [ 4, 1, 4 ]
 >           = 1
 >
+
 
 Here is the result of generating the entire second row:
 
@@ -197,7 +290,17 @@ Here is the result of generating the entire second row:
     | G | 2 | 1 | 3 | 5 | 6 | 8 | 10| 12| 14| 16| 18|
     +---+---+---+---+---+---+---+---+---+---+---+---+
 
-As the algorithm proceeds row-by-row, the entirety of the matrix is created:
+
+
+
+
+
+
+
+
+
+
+As the algorithm proceeds row-by-row, the entirety of the matrix 𝙈 is created:
 
     +---+---+---+---+---+---+---+---+---+---+---+---+
     | × | - | A | T | T | A | G | A | G | A | C | A |
@@ -220,6 +323,13 @@ As the algorithm proceeds row-by-row, the entirety of the matrix is created:
     +---+---+---+---+---+---+---+---+---+---+---+---+
 
 
+
+
+
+
+
+
+
 If one were to calculate more than just the alignment distance,
 and also compute the /actual/ alignment of 𝙨₁ and 𝙨₂,
 this can be achieved by "tracing backwards" from the final cell 𝙈ₘₙ
@@ -233,6 +343,23 @@ Repeat this process until arriving at 𝙈₀₀:
   * For each ↖, align @𝙨₁[i]@ with @𝙨₂[j]@.
   * For each ↖, align @𝙨₁[i]@ with @  ―  @.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 One possible "traceback" path of the matrix 𝙈 is depicited below:
 
     +---+---+---+---+---+---+---+---+---+---+---+---+
@@ -240,9 +367,9 @@ One possible "traceback" path of the matrix 𝙈 is depicited below:
     +---+---+---+---+---+---+---+---+---+---+---+---+
     | - | ↖ |   |   |   |   |   |   |   |   |   |   |
     +---+---+---+---+---+---+---+---+---+---+---+---+
-    | G |   | ↖ |   |   |   |   |   |   |   |   |   |
+    | G | ↑ |   |   |   |   |   |   |   |   |   |   |
     +---+---+---+---+---+---+---+---+---+---+---+---+
-    | A |   | ↑ |   |   |   |   |   |   |   |   |   |
+    | A |   | ↖ |   |   |   |   |   |   |   |   |   |
     +---+---+---+---+---+---+---+---+---+---+---+---+
     | T |   |   | ↖ |   |   |   |   |   |   |   |   |
     +---+---+---+---+---+---+---+---+---+---+---+---+
@@ -255,10 +382,12 @@ One possible "traceback" path of the matrix 𝙈 is depicited below:
     | A |   |   |   |   |   |   | ↖ | ← | ← | ← | ← |
     +---+---+---+---+---+---+---+---+---+---+---+---+
 
+
 This "traceback" corresponds to the following string alignment:
 
 > 𝙨₁ = GATTACA----
 > 𝙨₂ = -ATTAGAGACA
+
 
 
 == Asymptotic Analysis
@@ -284,7 +413,13 @@ in space complexity:
 Surprisingly, this improved version of the Needleman–Wunsch algorithm is
 incredibly amenable to a functional programming style.
 
+
 -}
+
+
+
+
+
 module StringAlignment (
   module StringAlignment,
 ) where
@@ -300,6 +435,19 @@ import Prelude hiding (head, last, repeat, scanl, tail, zip3)
 import Data.Bits
 import Text.ParserCombinators.ReadPrec (get, pfail, (<++))
 import Text.Read (Read (..))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 {- |
@@ -329,6 +477,9 @@ infinity ∷ Distance
 infinity = D maxBound
 
 
+
+
+
 {- |
 Define a measure to be used as σ.
 
@@ -339,6 +490,24 @@ measure x y | x == y = 0
 measure '-' _ = 2
 measure _ '-' = 2
 measure _  _  = 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 {- |
@@ -364,10 +533,13 @@ needlemanWunschDefinition σ in1 in2 =
         -}
         minimizeCellDistance :: Char -> Distance -> (Distance, Distance, Char) -> Distance
         minimizeCellDistance charL cellL (cellD, cellA, charA) = minimum
-            [ cellL + σ  '-'  charA  
-            , cellD + σ charL charA 
-            , cellA + σ charL  '-'  
+            [ cellL + σ  '-'  charA
+            , cellD + σ charL charA
+            , cellA + σ charL  '-'
             ]
+
+
+
 
         {- |
         Generate the first row, which will be used as the accumulator seed for the subsequent rows.
@@ -385,7 +557,18 @@ needlemanWunschDefinition σ in1 in2 =
 
         -}
         firstRow :: NonEmpty Distance
-        firstRow = NE.fromList . L.scanl (minimizeCellDistance '-') 0 $ L.zip3 (L.repeat infinity) (L.repeat infinity) s2
+        firstRow = NE.fromList . L.scanl (minimizeCellDistance '-') 0 $
+            L.zip3 (L.repeat infinity) (L.repeat infinity) s2
+
+
+
+
+
+
+
+
+
+
 
         -- | Compute a row of the memoization matrix 𝙈
         computeRow
@@ -393,7 +576,7 @@ needlemanWunschDefinition σ in1 in2 =
           -> Char              -- ^ The symbol in 𝙨₁ which was placed in front of this row
           -> NonEmpty Distance -- ^ The current row of 𝙈
         computeRow prevRow charL =
-            let 
+            let
                 diagRow :: NonEmpty Distance
                 diagRow = infinity <| prevRow
 
@@ -405,10 +588,17 @@ needlemanWunschDefinition σ in1 in2 =
                 -}
                 finalize :: NonEmpty Distance -> NonEmpty Distance
                 finalize = NE.fromList . NE.tail
-                
+
             in  finalize . NE.scanl (minimizeCellDistance charL) infinity . zip3 diagRow prevRow $ '-' :| s2
 
     in  NE.last $ L.foldl' computeRow firstRow s1
+
+
+
+
+
+
+
 
 
 instance Enum Distance where
